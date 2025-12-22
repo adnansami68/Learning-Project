@@ -1,5 +1,6 @@
 #include <iostream>
 #include <conio.h>
+#include<fstream>
 using namespace std;
 
 void display()
@@ -43,6 +44,8 @@ int main()
     int option;
     int deposit;
     int withdraw;
+    ofstream myfile;
+    myfile.open("atm.txt", ios::out | ios::app);
 
     if (!checkPin())
     {
@@ -52,7 +55,7 @@ int main()
     while (true)
     {
         display();
-        cout << "\n   Choose Option: ";
+        cout << "Choose Option:"<<endl;
         cin >> option;
 
         system("cls");
@@ -61,6 +64,7 @@ int main()
         {
             case 1:
                 cout << "Your Balance Now: " << balance << endl;
+                myfile << "Current Balance: " << balance << endl;
                 break;
 
             case 2:
@@ -69,32 +73,43 @@ int main()
                 balance += deposit;
                 cout << "You have deposited: " << deposit << endl;
                 cout << "My Current Balance Now: " << balance << endl;
+                
+                myfile << "Deposited Amount: " << deposit << endl;
+                myfile << "Current Balance: " << balance << endl;
                 break;
 
             case 3:
                 cout << "Enter Withdraw Amount: ";
                 cin >> withdraw;
 
+
                 if (withdraw <= balance)
                 {
                     balance -= withdraw;
                     cout << "You have withdrawn: " << withdraw << endl;
                     cout << "My Current Balance Now: " << balance << endl;
+                    myfile << "Withdrawn Amount: " << withdraw << endl;
+                    myfile << "Current Balance: " << balance << endl;
                 }
                 else
                 {
                     cout << "Insufficient Balance!" << endl;
+                    myfile << "Failed Withdrawal Attempt: " << withdraw << endl;
                 }
                 break;
 
             case 4:
                 cout << "Thank you for using Adnan's ATM Booth!" << endl;
+                myfile << "Session Ended. Final Balance: " << balance << endl;
                 return 0;
 
             default:
                 cout << "Wrong Input, please try again." << endl;
-        }
-    }
+                myfile << "Invalid Option Selected: " << option << endl;
 
+        }
+        cout << "Press any key to continue... ... ..." << endl;
+    }
+    myfile.close();
     return 0;
 }
